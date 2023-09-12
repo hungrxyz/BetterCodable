@@ -30,6 +30,19 @@ class CustomDateCodableValueTests: XCTestCase {
         XCTAssertEqual(fixture.iso8601, Date(timeIntervalSince1970: 851013597.123))
     }
 
+    func testDecodingAndEncodingISO8601FullDateString() throws {
+        struct Fixture: Codable {
+            @DateValue<ISO8601FullDateStrategy> var iso8601: Date
+        }
+        let jsonData = #"{"iso8601": "1996-12-19"}"#.data(using: .utf8)!
+
+        let fixture = try JSONDecoder().decode(Fixture.self, from: jsonData)
+        let fullDateFormatter = ISO8601DateFormatter()
+        fullDateFormatter.formatOptions = .withFullDate
+        let expectedDate = fullDateFormatter.date(from: "1996-12-19")!
+        XCTAssertEqual(fixture.iso8601, expectedDate)
+    }
+
     func testDecodingAndEncodingRFC3339DateString() throws {
          struct Fixture: Codable {
             @DateValue<RFC3339Strategy> var rfc3339Date: Date
