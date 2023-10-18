@@ -28,7 +28,7 @@ extension OptionalDateValue: Decodable where Formatter.RawValue: Decodable {
         do {
             let value = try Formatter.RawValue(from: decoder)
             self.wrappedValue = try Formatter.decode(value)
-        } catch DecodingError.valueNotFound(let rawType, _) where rawType == Formatter.RawValue.self {
+        } catch DecodingError.valueNotFound {
             self.wrappedValue = nil
         } catch {
             throw error
